@@ -75,7 +75,7 @@
             </div>
         </div>
 
-        <!-- Modal -->
+        <!-- Modal Edit -->
         <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -121,6 +121,42 @@
             </div>
         </div>
 
+        <!-- Modal Message -->
+        <div class="modal fade" id="validationModal" tabindex="-1" aria-labelledby="validationModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="validationModalLabel">{{ modalTitle }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ modalMessage }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Confirm -->
+        <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmModalLabel">{{ confirmTitle }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ confirmMessage }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-danger" @click="confirmDelete">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -128,6 +164,11 @@
     export default {
         data() {
             return {
+                modalTitle: '', 
+                modalMessage: '',
+                confirmTitle: '', 
+                confirmMessage: '', 
+                itemToDelete: null, 
                 newLink: {
                     id: '',
                     name: '',
@@ -191,6 +232,34 @@
             }
         },
         methods: {
+            showModal(title, message) {
+                this.modalTitle = title;
+                this.modalMessage = message;
+                const validationModal = new bootstrap.Modal(document.getElementById('validationModal'));
+                validationModal.show();
+            },
+            showConfirmModal(title, message, index) {
+                this.confirmTitle = title;
+                this.confirmMessage = message;
+                this.itemToDelete = index;
+
+                const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+                confirmModal.show();
+            },
+            confirmDelete() {
+                // Eliminar el elemento seleccionado
+                if (this.itemToDelete !== null) {
+                    this.linksArray.splice(this.itemToDelete, 1);
+                    this.showModal('Confirmación', 'Registro eliminado exitosamente.');
+                    this.itemToDelete = null; // Limpiar el índice después de eliminar
+                }
+
+                // Cerrar el modal de confirmación
+                const modalElement = document.getElementById('confirmModal');
+                const modalInstance = bootstrap.Modal.getInstance(modalElement);
+                if (modalInstance) modalInstance.hide();
+            },
+
             save() {
                 // Validar que los campos no estén vacíos
 
@@ -211,14 +280,14 @@
                     this.newLink.phone = '';
                     this.newLink.country = '';
                     this.newLink.city = '';
+
+                    this.showModal('Confirmación','Registro creado exitosamente.');
                 } else {
-                    alert("Por favor, completa todos los campos.");
+                    this.showModal('Error de validación', 'Por favor, completa todos los campos.');
                 }
             },
             remove(index) {
-                if (confirm("¿Está seguro de eliminar este ítem?")) {
-                    this.linksArray.splice(index, 1);
-                }
+                this.showConfirmModal('Confirmación de eliminación', '¿Está seguro de eliminar este ítem?', index);
             },
             edit(index) {
                 this.itemSelected = {...this.linksArray[index]};
@@ -237,8 +306,10 @@
 
                     this.itemSelected = null;
                     this.indexSelected = null;
+                    this.showModal('Confirmación', 'Registro actualizado exitosamente.');
+
                 } else {
-                    alert("Por favor, completa todos los campos.");
+                    this.showModal('Error de validación', 'Por favor, completa todos los campos.');
                 }
             },
             getList() {
