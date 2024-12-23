@@ -1,19 +1,19 @@
-# mis-links
+# Aplicación frontend de un CRUD de contactos realizado el Vue.js 3
 
-## Project setup
+## Configuración del proyecto
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+## Compiles and hot-reloads for development
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+## Compila y minimiza para producción
 ```
 npm run build
 ```
 
-### Customize configuration
+## Personalizar configuración
 See [Configuration Reference](https://cli.vuejs.org/config/).

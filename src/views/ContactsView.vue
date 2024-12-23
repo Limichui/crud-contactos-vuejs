@@ -1,12 +1,12 @@
 <template>
     <div class="about">
-        <h5 class="mb-5 mt-5">Mis links</h5>
+        <h5 class="mb-5 mt-5">Mis contactos</h5>
 
         <div>
             <div class="mb-3">
                 <div class="input-group">
                     <span class="input-group-text" id="type-filter"><i
-                            class="bi bi-filter "></i>  Filtrar por tipo </span>
+                            class="bi bi-filter "></i>  Filtrar por nombre </span>
                     <select class="form-select" @change="toFilter = $event.target.value">
                         <option value="">todos</option>
                         <option v-for="type in types" :value="type" :key="type">{{type}}</option>
@@ -16,9 +16,9 @@
 
             <div class="mb-3">
                 <div class="input-group">
-                    <span class="input-group-text" id="description-search-text"><i class="bi bi-search"></i> Buscar en descripción </span>
+                    <span class="input-group-text" id="description-search-text"><i class="bi bi-search"></i> Buscar por nombre </span>
                     <input type="search" class="form-control" id="description-search"
-                           @search="this.toSearch = $event.target.value">
+                        @search="this.toSearch = $event.target.value">
                 </div>
             </div>
         </div>
@@ -50,19 +50,27 @@
                         </tr>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Tipo</th>
-                            <th scope="col">Descripción</th>
-                            <th scope="col">URL</th>
-                            <th></th>
+                            <th scope="col">Id</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Correo electrónico</th>
+                            <th scope="col">Dirección</th>
+                            <th scope="col">Teléfono</th>
+                            <th scope="col">País</th>
+                            <th scope="col">Ciudad</th>
+                            <th>Acciones</th>
                         </tr>
                         </thead>
 
                         <tbody>
                         <tr v-for="(link, index) in getList()" :key="index">
                             <th scope="row">{{1+index}}</th>
-                            <td>{{link.type}}</td>
-                            <td>{{link.description}}</td>
-                            <td><a :href="link.url">{{link.url}}</a></td>
+                            <td>{{link.id}}</td>
+                            <td>{{link.name}}</td>
+                            <td>{{link.email}}</td>
+                            <td>{{link.address}}</td>
+                            <td>{{link.phone}}</td>
+                            <td>{{link.country}}</td>
+                            <td>{{link.city}}</td>
                             <td>
                                 <button type="button" class="btn btn-info btn-sm" @click="edit(index)"><i
                                         class="bi bi-pen"></i></button>
@@ -88,7 +96,6 @@
                     <form @submit.prevent="saveEdit()">
                         <div class="modal-body" v-if="itemSelected">
 
-
                             <div class="mb-3">
                                 <label for="updateType" class="form-label">Tipo de link</label>
                                 <select class="form-select" v-model="itemSelected.type" id="updateType">
@@ -98,7 +105,7 @@
                             <div class="mb-3">
                                 <label for="updateDescription" class="form-label">Descripción</label>
                                 <input type="text" v-model="itemSelected.description" class="form-control"
-                                       id="updateDescription">
+                                id="updateDescription">
                             </div>
                             <div class="mb-3">
                                 <label for="updateUrl" class="form-label">URL</label>
@@ -124,35 +131,59 @@
             return {
                 types: ['frontend', 'backend', 'system', 'library'],
                 newLink: {
-                    type: '',
-                    description: '',
-                    url: ''
+                    id: '',
+                    name: '',
+                    email: '',
+                    address: '',
+                    phone: '',
+                    country: '',
+                    city: ''
                 },
                 linksArray: [
                     {
-                        type: 'frontend',
-                        description: 'Vue.js (o simplemente Vue) es un framework progresivo de JavaScript utilizado para construir interfaces de usuario (UI) y aplicaciones web modernas.',
-                        url: 'https://vuejs.org/'
+                        id: 1,
+                        name: "Alice Johnson",
+                        email: "alice.johnson@example.com",
+                        address: "123 Maple Street",
+                        phone: "123-456-7890",
+                        country: "USA",
+                        city: "New York"
                     },
                     {
-                        type: 'frontend',
-                        description: 'Bootstrap es una biblioteca de herramientas de código abierto optimizadas para el diseño de sitios y aplicaciones web.',
-                        url: 'https://getbootstrap.com/docs/5.3/getting-started/introduction/'
+                        id: 2,
+                        name: "Bob Smith",
+                        email: "bob.smith@example.com",
+                        address: "456 Oak Avenue",
+                        phone: "987-654-3210",
+                        country: "Canada",
+                        city: "Toronto"
                     },
                     {
-                        type: 'backend',
-                        description: 'JSON Server es un módulo NPM muy útil, de código abierto y publicado bajo la licencia MIT, que permite a los desarrolladores crear prototipos de su Back-end realmente rápido, creando una API REST falsa a partir de un archivo JSON simple.',
-                        url: 'https://www.npmjs.com/package/json-server'
+                        id: 3,
+                        name: "Carol White",
+                        email: "carol.white@example.com",
+                        address: "789 Pine Road",
+                        phone: "555-123-4567",
+                        country: "UK",
+                        city: "London"
                     },
                     {
-                        type: 'system',
-                        description: 'Node.js es un entorno de tiempo de ejecución de JavaScript.',
-                        url: 'https://nodejs.org/en'
+                        id: 4,
+                        name: "David Brown",
+                        email: "david.brown@example.com",
+                        address: "321 Elm Street",
+                        phone: "444-555-6666",
+                        country: "Australia",
+                        city: "Sydney"
                     },
                     {
-                        type: 'library',
-                        description: 'Axios es una biblioteca de JavaScript que permite realizar solicitudes HTTP desde un navegador web o Node.js.',
-                        url: 'https://axios-http.com/es/docs/intro'
+                        id: 5,
+                        name: "Emily Davis",
+                        email: "emily.davis@example.com",
+                        address: "654 Spruce Lane",
+                        phone: "333-444-5555",
+                        country: "USA",
+                        city: "Los Angeles"
                     }
                 ],
                 itemSelected: null,
@@ -205,7 +236,7 @@
             getList() {
                 let result = this.linksArray.filter((item) => {
                     if (this.toSearch) {
-                        return item.description.includes(this.toSearch);
+                        return item.name.includes(this.toSearch);
                     }
                     return true;
                 });
