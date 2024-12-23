@@ -6,8 +6,7 @@
             <div class="mb-3">
                 <div class="input-group">
                     <span class="input-group-text" id="name-search-text"><i class="bi bi-search me-2"></i>Buscar por nombre: </span>
-                    <input type="search" class="form-control" id="name-search"
-                        @search="this.toSearch = $event.target.value">
+                    <input type="search" class="form-control" id="name-search" placeholder="Buscar por nombre" v-model="toSearch" @input="getList" />
                 </div>
             </div>
         </div>
@@ -227,7 +226,6 @@
                 ],
                 itemSelected: null,
                 indexSelected: null,
-                toFilter: '',
                 toSearch: ''
             }
         },
@@ -313,18 +311,15 @@
                 }
             },
             getList() {
-                let result = this.linksArray.filter((item) => {
-                    if (this.toSearch) {
-                        alert(this.toSearch);
-                        return item.name.includes(this.toSearch);
-                    }
-                    return true;
-                });
-                
-                return result.filter((item) => {
-                    return true;
-                });
-                // return this.linksArray;
+                // Si el campo de búsqueda está vacío, retorna todos los registros
+                if (!this.toSearch.trim()) {
+                    return this.linksArray;
+                }
+
+                // Filtra los registros que coincidan con el texto de búsqueda
+                return this.linksArray.filter((item) => 
+                    item.name.toLowerCase().includes(this.toSearch.toLowerCase())
+                );
             }
 
         }
