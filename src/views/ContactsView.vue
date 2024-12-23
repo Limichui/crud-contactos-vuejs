@@ -5,19 +5,8 @@
         <div>
             <div class="mb-3">
                 <div class="input-group">
-                    <span class="input-group-text" id="type-filter"><i
-                            class="bi bi-filter "></i>  Filtrar por nombre </span>
-                    <select class="form-select" @change="toFilter = $event.target.value">
-                        <option value="">todos</option>
-                        <option v-for="type in types" :value="type" :key="type">{{type}}</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <div class="input-group">
-                    <span class="input-group-text" id="description-search-text"><i class="bi bi-search"></i> Buscar por nombre </span>
-                    <input type="search" class="form-control" id="description-search"
+                    <span class="input-group-text" id="name-search-text"><i class="bi bi-search me-2"></i>Buscar por nombre: </span>
+                    <input type="search" class="form-control" id="name-search"
                         @search="this.toSearch = $event.target.value">
                 </div>
             </div>
@@ -30,27 +19,29 @@
                         <thead>
                         <tr>
                             <th colspan="2">
-
-                                <select class="form-select" aria-label="Default select example" v-model="newLink.type">
-                                    <option v-for="type in types" :value="type" :key="type">{{type}}</option>
-                                </select>
-
+                                <input type="text" class="form-control" id="name" v-model="newLink.name">
                             </th>
                             <th>
-
-                                <input type="text" class="form-control" id="description" v-model="newLink.description">
-
+                                <input type="email" class="form-control" id="email" v-model="newLink.email">
                             </th>
                             <th>
-                                <input type="url" class="form-control" id="link" v-model="newLink.url">
+                                <input type="text" class="form-control" id="address" v-model="newLink.address">
+                            </th>
+                            <th>
+                                <input type="text" class="form-control" id="phone" v-model="newLink.phone">
+                            </th>
+                            <th>
+                                <input type="text" class="form-control" id="country" v-model="newLink.country">
+                            </th>
+                            <th>
+                                <input type="text" class="form-control" id="city" v-model="newLink.city">
                             </th>
                             <th>
                                 <button type="submit" class="btn btn-primary">Agregar</button>
                             </th>
                         </tr>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Id</th>
+                            <th scope="col">ID</th>
                             <th scope="col">Nombre</th>
                             <th scope="col">Correo electrónico</th>
                             <th scope="col">Dirección</th>
@@ -63,8 +54,7 @@
 
                         <tbody>
                         <tr v-for="(link, index) in getList()" :key="index">
-                            <th scope="row">{{1+index}}</th>
-                            <td>{{link.id}}</td>
+                            <th scope="row">{{link.id}}</th>
                             <td>{{link.name}}</td>
                             <td>{{link.email}}</td>
                             <td>{{link.address}}</td>
@@ -97,24 +87,33 @@
                         <div class="modal-body" v-if="itemSelected">
 
                             <div class="mb-3">
-                                <label for="updateType" class="form-label">Tipo de link</label>
-                                <select class="form-select" v-model="itemSelected.type" id="updateType">
-                                    <option v-for="type in types" :value="type">{{type}}</option>
-                                </select>
+                                <label for="updateName" class="form-label">Nombre</label>
+                                <input type="text" v-model="itemSelected.name" class="form-control" id="updateName">
                             </div>
                             <div class="mb-3">
-                                <label for="updateDescription" class="form-label">Descripción</label>
-                                <input type="text" v-model="itemSelected.description" class="form-control"
-                                id="updateDescription">
+                                <label for="updateEmail" class="form-label">Correo electrónico</label>
+                                <input type="email" v-model="itemSelected.email" class="form-control" id="updateEmail">
                             </div>
                             <div class="mb-3">
-                                <label for="updateUrl" class="form-label">URL</label>
-                                <input type="text" v-model="itemSelected.url" class="form-control" id="updateUrl">
+                                <label for="updateAddress" class="form-label">Dirección</label>
+                                <input type="text" v-model="itemSelected.address" class="form-control" id="updateAddress">
+                            </div>
+                            <div class="mb-3">
+                                <label for="updatePhone" class="form-label">Teléfono</label>
+                                <input type="text" v-model="itemSelected.phone" class="form-control" id="updatePhone">
+                            </div>
+                            <div class="mb-3">
+                                <label for="updateCountry" class="form-label">País</label>
+                                <input type="text" v-model="itemSelected.country" class="form-control" id="updateCountry">
+                            </div>
+                            <div class="mb-3">
+                                <label for="updateCity" class="form-label">City</label>
+                                <input type="text" v-model="itemSelected.city" class="form-control" id="updateCity">
                             </div>
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" too>Cancelar</button>
                             <button type="submit" class="btn btn-primary">Guardar cambios</button>
                         </div>
                     </form>
@@ -129,7 +128,6 @@
     export default {
         data() {
             return {
-                types: ['frontend', 'backend', 'system', 'library'],
                 newLink: {
                     id: '',
                     name: '',
@@ -188,7 +186,6 @@
                 ],
                 itemSelected: null,
                 indexSelected: null,
-                typeFilter: '',
                 toFilter: '',
                 toSearch: ''
             }
@@ -196,18 +193,24 @@
         methods: {
             save() {
                 // Validar que los campos no estén vacíos
-                if (this.newLink.type && this.newLink.description && this.newLink.url) {
+
+                if (this.newLink.name && this.newLink.email && this.newLink.address && this.newLink.phone && this.newLink.country && this.newLink.city) {    
+                    //Obtener el ultimo Id e incrementar
+                    const lastId = this.linksArray.length > 0 
+                    ? Math.max(...this.linksArray.map(item => item.id)) 
+                    : 0; // Si no hay elementos, el último id será 0.
+        
+                    this.newLink.id = lastId + 1;
+                    
                     // Agregar un nuevo objeto al array
-                    /**
-                     * const newObj {type: this.newlink.type}
-                     * 
-                     * const newObj = {...this.newLink}
-                     * */
                     this.linksArray.push({...this.newLink});
                     // Limpiar los campos del formulario
-                    this.newLink.type = '';
-                    this.newLink.description = '';
-                    this.newLink.url = '';
+                    this.newLink.name = '';
+                    this.newLink.email = '';
+                    this.newLink.address = '';
+                    this.newLink.phone = '';
+                    this.newLink.country = '';
+                    this.newLink.city = '';
                 } else {
                     alert("Por favor, completa todos los campos.");
                 }
@@ -224,26 +227,30 @@
                 editModal.show();
             },
             saveEdit() {
-                this.linksArray[this.indexSelected] = {...this.itemSelected};
+                // Validar que los campos no estén vacíos
+                if (this.itemSelected.name && this.itemSelected.email && this.itemSelected.address && this.itemSelected.phone && this.itemSelected.country && this.itemSelected.city) {
+                    this.linksArray[this.indexSelected] = {...this.itemSelected};
 
-                const modalElement = document.getElementById('editModal');
-                const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
-                modalInstance.hide();
+                    const modalElement = document.getElementById('editModal');
+                    const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+                    modalInstance.hide();
 
-                this.itemSelected = null;
-                this.indexSelected = null;
+                    this.itemSelected = null;
+                    this.indexSelected = null;
+                } else {
+                    alert("Por favor, completa todos los campos.");
+                }
             },
             getList() {
                 let result = this.linksArray.filter((item) => {
                     if (this.toSearch) {
+                        alert(this.toSearch);
                         return item.name.includes(this.toSearch);
                     }
                     return true;
                 });
+                
                 return result.filter((item) => {
-                    if (this.toFilter) {
-                        return item.type === this.toFilter;
-                    }
                     return true;
                 });
                 // return this.linksArray;
@@ -260,4 +267,5 @@
     .card{
         overflow-x: auto;
     }
+
 </style>
