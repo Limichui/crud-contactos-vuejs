@@ -1,5 +1,7 @@
 # Aplicación frontend de un CRUD de contactos realizado el Vue.js 3
 
+## Integrante: Limbert Olmos Mercado
+
 ## Configuración del proyecto
 ```
 npm install

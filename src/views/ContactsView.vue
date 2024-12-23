@@ -1,39 +1,49 @@
 <template>
-    <div class="about">
-        <h5 class="mb-5 mt-5">Mis contactos</h5>
+    <div class="contact">
+        <header class="hero-section">
+            <h1 class="display-4 mt-3"><strong>Contactos:</strong></h1>
+        </header>
 
         <div>
             <div class="mb-3">
                 <div class="input-group">
                     <span class="input-group-text" id="name-search-text"><i class="bi bi-search me-2"></i>Buscar por nombre: </span>
-                    <input type="search" class="form-control" id="name-search" placeholder="Buscar por nombre" v-model="toSearch" @input="getList" />
+                    <input type="search" class="form-control" id="name-search" placeholder="Buscar por nombre" v-model="toSearchName" @input="getList" />
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="mb-3">
+                <div class="input-group">
+                    <span class="input-group-text" id="email-search-text"><i class="bi bi-search me-2"></i>Buscar por correo electrónico: </span>
+                    <input type="search" class="form-control" id="email-search" placeholder="Buscar correo electrónico" v-model="toSearchEmail" @input="getList" />
                 </div>
             </div>
         </div>
 
-        <div class="card">
+        <div class="card mb-5">
             <div class="card-body">
                 <form @submit.prevent="save()">
                     <table class="table table-striped">
                         <thead>
                         <tr>
                             <th colspan="2">
-                                <input type="text" class="form-control" id="name" v-model="newLink.name">
+                                <input type="text" class="form-control" id="name" v-model="newContact.name">
                             </th>
                             <th>
-                                <input type="email" class="form-control" id="email" v-model="newLink.email">
+                                <input type="email" class="form-control" id="email" v-model="newContact.email">
                             </th>
                             <th>
-                                <input type="text" class="form-control" id="address" v-model="newLink.address">
+                                <input type="text" class="form-control" id="address" v-model="newContact.address">
                             </th>
                             <th>
-                                <input type="text" class="form-control" id="phone" v-model="newLink.phone">
+                                <input type="text" class="form-control" id="phone" v-model="newContact.phone">
                             </th>
                             <th>
-                                <input type="text" class="form-control" id="country" v-model="newLink.country">
+                                <input type="text" class="form-control" id="country" v-model="newContact.country">
                             </th>
                             <th>
-                                <input type="text" class="form-control" id="city" v-model="newLink.city">
+                                <input type="text" class="form-control" id="city" v-model="newContact.city">
                             </th>
                             <th>
                                 <button type="submit" class="btn btn-primary">Agregar</button>
@@ -168,7 +178,7 @@
                 confirmTitle: '', 
                 confirmMessage: '', 
                 itemToDelete: null, 
-                newLink: {
+                newContact: {
                     id: '',
                     name: '',
                     email: '',
@@ -177,7 +187,7 @@
                     country: '',
                     city: ''
                 },
-                linksArray: [
+                contactsArray: [
                     {
                         id: 1,
                         name: "Alice Johnson",
@@ -226,7 +236,8 @@
                 ],
                 itemSelected: null,
                 indexSelected: null,
-                toSearch: ''
+                toSearchName: '',
+                toSearchEmail: '',
             }
         },
         methods: {
@@ -247,7 +258,7 @@
             confirmDelete() {
                 // Eliminar el elemento seleccionado
                 if (this.itemToDelete !== null) {
-                    this.linksArray.splice(this.itemToDelete, 1);
+                    this.contactsArray.splice(this.itemToDelete, 1);
                     this.showModal('Confirmación', 'Registro eliminado exitosamente.');
                     this.itemToDelete = null; // Limpiar el índice después de eliminar
                 }
@@ -261,23 +272,23 @@
             save() {
                 // Validar que los campos no estén vacíos
 
-                if (this.newLink.name && this.newLink.email && this.newLink.address && this.newLink.phone && this.newLink.country && this.newLink.city) {    
+                if (this.newContact.name && this.newContact.email && this.newContact.address && this.newContact.phone && this.newContact.country && this.newContact.city) {    
                     //Obtener el ultimo Id e incrementar
-                    const lastId = this.linksArray.length > 0 
-                    ? Math.max(...this.linksArray.map(item => item.id)) 
+                    const lastId = this.contactsArray.length > 0 
+                    ? Math.max(...this.contactsArray.map(item => item.id)) 
                     : 0; // Si no hay elementos, el último id será 0.
         
-                    this.newLink.id = lastId + 1;
+                    this.newContact.id = lastId + 1;
                     
                     // Agregar un nuevo objeto al array
-                    this.linksArray.push({...this.newLink});
+                    this.contactsArray.push({...this.newContact});
                     // Limpiar los campos del formulario
-                    this.newLink.name = '';
-                    this.newLink.email = '';
-                    this.newLink.address = '';
-                    this.newLink.phone = '';
-                    this.newLink.country = '';
-                    this.newLink.city = '';
+                    this.newContact.name = '';
+                    this.newContact.email = '';
+                    this.newContact.address = '';
+                    this.newContact.phone = '';
+                    this.newContact.country = '';
+                    this.newContact.city = '';
 
                     this.showModal('Confirmación','Registro creado exitosamente.');
                 } else {
@@ -288,7 +299,7 @@
                 this.showConfirmModal('Confirmación de eliminación', '¿Está seguro de eliminar este ítem?', index);
             },
             edit(index) {
-                this.itemSelected = {...this.linksArray[index]};
+                this.itemSelected = {...this.contactsArray[index]};
                 this.indexSelected = index;
                 const editModal = new bootstrap.Modal(document.getElementById('editModal'));
                 editModal.show();
@@ -296,7 +307,7 @@
             saveEdit() {
                 // Validar que los campos no estén vacíos
                 if (this.itemSelected.name && this.itemSelected.email && this.itemSelected.address && this.itemSelected.phone && this.itemSelected.country && this.itemSelected.city) {
-                    this.linksArray[this.indexSelected] = {...this.itemSelected};
+                    this.contactsArray[this.indexSelected] = {...this.itemSelected};
 
                     const modalElement = document.getElementById('editModal');
                     const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
@@ -311,15 +322,18 @@
                 }
             },
             getList() {
-                // Si el campo de búsqueda está vacío, retorna todos los registros
-                if (!this.toSearch.trim()) {
-                    return this.linksArray;
-                }
+                return this.contactsArray.filter((item) => {
+                    const matchesName = this.toSearchName.trim()
+                        ? item.name.toLowerCase().includes(this.toSearchName.toLowerCase())
+                        : true;
 
-                // Filtra los registros que coincidan con el texto de búsqueda
-                return this.linksArray.filter((item) => 
-                    item.name.toLowerCase().includes(this.toSearch.toLowerCase())
-                );
+                    const matchesEmail = this.toSearchEmail.trim()
+                        ? item.email.toLowerCase().includes(this.toSearchEmail.toLowerCase())
+                        : true;
+
+                    return matchesName && matchesEmail;
+                });
+
             }
 
         }

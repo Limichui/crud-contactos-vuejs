@@ -1,7 +1,7 @@
 <template>
   <div class="about">
     <header class="hero-section">
-      <h1 class="display-4">Integrante</h1>
+      <h1 class="display-4 mt-3"><strong>Integrante:</strong></h1>
     </header>
     <section class="content-section container">
       <div class="row justify-content-center align-items-center">
