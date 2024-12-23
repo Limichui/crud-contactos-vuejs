@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <header class="hero-section">
-      <h1 class="display-4 mt-3"><strong>Práctica 1: Libeta de Contactos</strong></h1>
+      <h1 class="display-4 mt-3"><strong>Práctica 1: Libreta de Contactos</strong></h1>
       <p class="lead">Módulo 6 VUE.JS del Diplomado en FullStack Debeloper Backend y Frontend - Sexta Versión</p>
     </header>
   </div>
